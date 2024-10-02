@@ -1,0 +1,1 @@
+imie_odbiorcy = input("Podaj imie solenizanta/ solenizantki: ")

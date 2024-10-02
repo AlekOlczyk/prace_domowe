@@ -5,3 +5,5 @@ rok_urodzenia = int(input("Podaj rok urodzenia solenizanta/ solenizantki: "))
 wiadomosc = input("Napisz wiadomość dla solenizanta/ solenizantki: ")
 
 imie_nadawcy = input("Podaj swoje imię: ")
+
+wiek_solenizanta = 2024 - rok_urodzenia

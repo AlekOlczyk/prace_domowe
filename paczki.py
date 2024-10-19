@@ -1,55 +1,48 @@
-# Napisz program do obsługi ładowarki paczek. Po uruchomieniu, aplikacja pyta ile paczek chcesz wysłać, a następnie wymaga podania wagi dla każdej z nich.
-#
-# Na koniec działania program powinien wyświetlić w podsumowaniu:
-#
-# Liczbę paczek wysłanych
-# Liczbę kilogramów wysłanych
-# Suma "pustych" - kilogramów (brak optymalnego pakowania). Liczba paczek * 20 - liczba kilogramów wysłanych
-# Która paczka miała najwięcej "pustych" kilogramów, jaki to był wynik
-#
-# Restrykcje:
-#
-# Waga elementów musi być z przedziału od 1 do 10 kg.
-# Każda paczka może maksymalnie zmieścić 20 kilogramów towaru.
-# W przypadku, jeżeli dodawany element przekroczy wagę towaru, ma zostać dodany do nowej paczki, a obecna wysłana.
-# W przypadku podania wagi elementu mniejszej od 1kg lub większej od 10kg, dodawanie paczek zostaje zakończone i wszystkie paczki są wysłane. Wyświetlane jest podsumowanie.
+# Pytanie użytkownika ile przedmiotów chce wysłać
+liczba_przedmiotow = int(input("Ile przedmiotów chcesz wysłać? "))
 
-#Pytanie użytkownika ile przedmiotow chce wyslac
-ilosc_przedmiotow = int(input("Ile przedmiotow chesz wysłać? "))
-
-# paczka = 20
+# Inicjalizacja zmiennych
+laczna_waga_przedmiotow = 0.0
 liczba_paczek = 1
-pojemnosc_biezacej_paczki = 0
-maksymalna_niewykorzystana_pojemnosc = 0
+pojemnosc_biezacej_paczki = 0.0
+maksymalna_niewykorzystana_pojemnosc = 0.0
 numer_paczki_z_maksymalna_niewykorzystana_pojemnoscia = 1
-laczna_waga_przedmiotow = 0
-#Pytanie użytkownika jaka wage ma dany przedmiot
-for przedmiot in range(ilosc_przedmiotow):
 
-    waga_przedmiotu = int(input("Podaj wage przedmiotu: "))
-    if waga_przedmiotu > 10 or waga_przedmiotu < 1:
-        ilosc_przedmiotow = przedmiot
+# Pytanie użytkownika o wagę każdego przedmiotu
+for przedmiot in range(liczba_przedmiotow):
+    waga_przedmiotu = float(input("Podaj wagę przedmiotu (1-10 kg): "))
+
+    # Sprawdzanie poprawności wagi
+    if waga_przedmiotu > 10.0 or waga_przedmiotu < 1.0:
+        print("Podano niepoprawną wagę. Przerywam dodawanie paczek.")
         break
+
     laczna_waga_przedmiotow += waga_przedmiotu
-    if waga_przedmiotu + pojemnosc_biezacej_paczki > 20:
-        if 20 - pojemnosc_biezacej_paczki > maksymalna_niewykorzystana_pojemnosc:
-            maksymalna_niewykorzystana_pojemnosc = 20 - pojemnosc_biezacej_paczki
+
+    # Sprawdzanie, czy waga przedmiotu mieści się w aktualnej paczce
+    if waga_przedmiotu + pojemnosc_biezacej_paczki > 20.0:
+        # Sprawdzenie niewykorzystanej pojemności przed zamknięciem paczki
+        niewykorzystana_pojemnosc = 20.0 - pojemnosc_biezacej_paczki
+        if niewykorzystana_pojemnosc > maksymalna_niewykorzystana_pojemnosc:
+            maksymalna_niewykorzystana_pojemnosc = niewykorzystana_pojemnosc
             numer_paczki_z_maksymalna_niewykorzystana_pojemnoscia = liczba_paczek
-            pojemnosc_biezacej_paczki = waga_przedmiotu
+
+        # Zaczynamy nową paczkę
         liczba_paczek += 1
+        pojemnosc_biezacej_paczki = waga_przedmiotu
     else:
         pojemnosc_biezacej_paczki += waga_przedmiotu
-if 20 - pojemnosc_biezacej_paczki > maksymalna_niewykorzystana_pojemnosc:
-    maksymalna_niewykorzystana_pojemnosc = 20 - pojemnosc_biezacej_paczki
+
+# Sprawdzenie niewykorzystanej pojemności ostatniej paczki
+niewykorzystana_pojemnosc = 20.0 - pojemnosc_biezacej_paczki
+if niewykorzystana_pojemnosc > maksymalna_niewykorzystana_pojemnosc:
+    maksymalna_niewykorzystana_pojemnosc = niewykorzystana_pojemnosc
     numer_paczki_z_maksymalna_niewykorzystana_pojemnoscia = liczba_paczek
-    pojemnosc_biezacej_paczki = waga_przedmiotu
 
-print(f"Chesz wysłać następującą liczbę przedmiotów: {ilosc_przedmiotow}.")
-print(f"Liczba wysłanych paczek wynosi: {liczba_paczek}")
-print(f"Łączna waga przedmiotów wynosi {laczna_waga_przedmiotow} kg.")
-# print(f"Pojemność bieżacej paczki wynosi {pojemnosc_biezacej_paczki} kg.")
-print(f"Liczba niewykorzystanych kilogramów wynosi: {liczba_paczek*20-laczna_waga_przedmiotow}")
-print(f"Numer paczki z największą niewykorzystana pojemnością to {numer_paczki_z_maksymalna_niewykorzystana_pojemnoscia} i wynosi {liczba_paczek*20-laczna_waga_przedmiotow}")
-
-
-
+# Wyświetlanie podsumowania
+print(f"\nPodsumowanie:")
+print(f"Liczba wysłanych paczek: {liczba_paczek}")
+print(f"Łączna waga wysłanych przedmiotów: {laczna_waga_przedmiotow:.2f} kg")
+print(f"Liczba niewykorzystanych kilogramów: {liczba_paczek * 20.0 - laczna_waga_przedmiotow:.2f} kg")
+print(
+    f"Paczka nr {numer_paczki_z_maksymalna_niewykorzystana_pojemnoscia} miała najwięcej niewykorzystanej pojemności: {maksymalna_niewykorzystana_pojemnosc:.2f} kg")

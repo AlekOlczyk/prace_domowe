@@ -10,13 +10,19 @@ numer_paczki_z_maksymalna_niewykorzystana_pojemnoscia = 1
 
 # Pytanie użytkownika o wagę każdego przedmiotu
 for przedmiot in range(liczba_przedmiotow):
-    waga_przedmiotu = float(input("Podaj wagę przedmiotu (1-10 kg): "))
+    while True:
+        waga_przedmiotu = float(input("Podaj wagę przedmiotu (1-10 kg): "))
 
-    # Sprawdzanie poprawności wagi
-    if waga_przedmiotu > 10.0 or waga_przedmiotu < 1.0:
-        print("Podano niepoprawną wagę. Przerywam dodawanie paczek.")
+        # Jeśli waga przedmiotu jest poza zakresem, proś o ponowne podanie
+        if waga_przedmiotu > 10.0:
+            print("Podana waga jest większa niż 10 kg. Podaj wagę z przedziału 1-10 kg.")
+            continue
+        elif waga_przedmiotu < 1.0:
+            print("Podana waga jest mniejsza niż 1 kg. Podaj wagę z przedziału 1-10 kg.")
+            continue
         break
 
+    # Dodajemy wagę do sumy całkowitej
     laczna_waga_przedmiotow += waga_przedmiotu
 
     # Sprawdzanie, czy waga przedmiotu mieści się w aktualnej paczce
@@ -27,7 +33,7 @@ for przedmiot in range(liczba_przedmiotow):
             maksymalna_niewykorzystana_pojemnosc = niewykorzystana_pojemnosc
             numer_paczki_z_maksymalna_niewykorzystana_pojemnoscia = liczba_paczek
 
-        # Zaczynamy nową paczkę
+        # Rozpoczęcie nowej paczki
         liczba_paczek += 1
         pojemnosc_biezacej_paczki = waga_przedmiotu
     else:

@@ -29,16 +29,16 @@
 # Po wykonaniu dowolnej komendy (np. "saldo") aplikacja ponownie wyświetla informację o dostępnych komendach, a także prosi o wprowadzenie jednej z nich.
 # Zadbaj o błędy, które mogą się pojawić w trakcie wykonywania operacji (np. przy komendzie "zakup" jeśli dla produktu podamy ujemną kwotę, aplikacja powinna wyświetlić informację o niemożności wykonania operacji i jej nie wykonać). Zadbaj też o prawidłowe typy danych.
 
-stan_konta = 10000
-przeglad = ["wpłata na konto 10000 zł"]
+stan_konta = 10_000
+przeglad = ["wpłata na konto 10000 zł", "proba", "proba"]
 stan_magazynowy = [
     {"nazwa":"dlugopis",
-     "stan_magazynu":"10",
-     "cena":"1"
+     "stan_magazynu":10,
+     "cena":float(1)
     },
     {"nazwa":"zeszyt",
-     "stan_magazynu":"15",
-     "cena":"2"
+     "stan_magazynu":15,
+     "cena":2.0
     }
 ]
 
@@ -56,37 +56,33 @@ while True:
             print(f"Dodałeś do konta {kwota}.\n")
             przeglad.append(f"Dodanie {kwota} zł.")
 
-    #sprzedaż produktów z magazynu(nie działa)
-    # elif wybor_uzytkownika == "2" or wybor_uzytkownika == "sprzedaz":
-    #     nazwa_produktu = input("Wpisz co chcesz kupić: ")
-    #     ilosc_produktu = int(input("Podaj ilość produktu: "))
-    #     cena_przedmiotu = float(input("Podaj cene jednego przedmiotu: "))
-    #     # znaleziono_produkt = False
-    #     for produkt in stan_magazynowy:
-    #         if produkt.get("nazwa") == nazwa_produktu and produkt.get("stan_magazynu") == ilosc_produktu and produkt.get("cena") == cena_przedmiotu:
-    #             if produkt.get("stan_magazynu") >= 1:
-    #                 produkt["stan_magazynu"] -= ilosc_produktu
-    #                 stan_konta += produkt.get("cena") #* ilosc_produktu
-    #                 print(f"Zakupiłeś {nazwa_produktu}.")
-    #             else:
-    #                 print("Wybrany produkt jest niedostępny")
-    #     #         znaleziono_produkt = True
-    #     #         break
-    #     # if not znaleziono_produkt:
-    #     #     print("Nie posiadamy podanego produktu.\n")
-
+    # sprzedaż produktów z magazynu(nie działa)
     elif wybor_uzytkownika == "2" or wybor_uzytkownika == "sprzedaz":
         nazwa_produktu = input("Podaj nazwe produktu ktory chcesz kupić: ")
-        ilosc_produktu = input("Podaj ile sztuk produktu chcesz kupić: ")   # jeżeli tu był int to nie działało
+        ilosc_produktu = int(input("Podaj ile sztuk produktu chcesz kupić: "))
         cena_przedmiotu = float(input("Podaj cene jednostkową produktu: "))
         for produkt in stan_magazynowy:
             if produkt.get("nazwa") == nazwa_produktu and produkt.get("stan_magazynu") >= ilosc_produktu and produkt.get("cena") == cena_przedmiotu:
                 produkt["stan_magazynu"] -= ilosc_produktu
-                stan_konta += produkt.get("cena") #* ilosc_produktu
-            print(f"Zakupiłeś {nazwa_produktu} w ilosci sztuk: {ilosc_produktu}.")
+                stan_konta += produkt.get("cena") * ilosc_produktu
+                print(f"Zakupiłeś {nazwa_produktu} w ilosci sztuk: {ilosc_produktu}.")
+                przeglad.append(f"Sprzedaż {nazwa_produktu} w ilości {ilosc_produktu} za kwotę {cena_przedmiotu * ilosc_produktu} zł.")
+                break
+
+            else:
+                print("Nie możesz zakupić podanego produktu w podanej ilosci.")
+                przeglad.append("Nieudana proba zakupu.")
+                break
+
+            # elif produkt.get("nazwa") == nazwa_produktu and produkt.get("stan_magazynu") < ilosc_produktu and produkt.get("cena") == cena_przedmiotu:
+            #     print("Nie mamy wystarczającej ilości produktu w magazynie")
+            # elif produkt.get("nazwa") == nazwa_produktu and produkt.get("stan_magazynu") < ilosc_produktu and produkt.get("cena") != cena_przedmiotu:
+            #     print("Podano błędną cenę.")
+            # elif produkt.get("nazwa") != nazwa_produktu:
+            #     print("Podano błędną nazwę produktu.")
 
 
-    # Zakup nowych produktow(działą)
+    # Zakup nowych produktow(działa)
     elif wybor_uzytkownika == "3" or wybor_uzytkownika == "zakup":
         nazwa_zakupionego_produktu = input("Wpisz co zakupiłeś: ")
         ilosc_zakupionego_produktu = int(input("Podaj ilość zakupionego produktu: "))
@@ -105,32 +101,49 @@ while True:
         stan_konta -= ilosc_zakupionego_produktu * cena_jednostkowa
         przeglad.append(f"Zakup {nazwa_zakupionego_produktu} w ilości: {ilosc_zakupionego_produktu}.")
 
-
     #Wyświetlenie stanu konta(działa)
     elif wybor_uzytkownika == "4" or wybor_uzytkownika == "konto":
         print(f"Stan konta wynosi: {stan_konta}.\n")
         przeglad.append("Wyświetlenie stanu konta.")
 
-
     #wyświetlenie stanu magazynowego (działa)
     elif wybor_uzytkownika == "5" or wybor_uzytkownika == "lista":
         print(stan_magazynowy)
+        przeglad.append("Sprawdzenie stanu magazynowego.")
 
-    #sprawdzenie stanu magazynowego konkretnego produktu (nie działa)
+    #sprawdzenie stanu magazynowego konkretnego produktu (działa)
     elif wybor_uzytkownika == "6" or wybor_uzytkownika == "magazyn":
         stan_produktu = input("Podaj nazwę produktu, którego chcesz sprawdzić stan magazynowy: ")
         for stan in stan_magazynowy:
             if stan.get("nazwa") == stan_produktu:
-                print(stan_magazynowy["nazwa"])
-                print(stan_magazynowy["stan_magazynu"])
-                print(stan_magazynowy["cena"])
+            #     print(stan["nazwa"])
+            #     print(stan["stan_magazynu"])
+            #     print(stan["cena"])
+                print(stan)
+                przeglad.append(f"Sprawdzenie stanu produktu: {stan_produktu}.")
 
-    #przeglad operacji(nie działą)
+    #przeglad operacji(działą)
     elif wybor_uzytkownika == "7" or wybor_uzytkownika == "przeglad":
-        od = int(input("Podaj od którego momentu chcesz wyswietlić historię: "))
-        do = int(input("Podaj do którego momentu chcesz wyswietlić historię: "))
-        print(przeglad["od":"do"])
+        od = input("Podaj od którego momentu chcesz wyswietlić historię: ")
+        do = input("Podaj do którego momentu chcesz wyswietlić historię: ")
+
+        if len(od) > 0:
+            od = int(od)
+        else:
+            od = 0
+        if len(do) > 0:
+            do = int(do)
+        else:
+            do = len(przeglad)
+        if od >= 0  and do <= len(przeglad) and od < len(przeglad):
+            print(przeglad[od:do])
+
+        else:
+            print(f"Podane błędne wartości. Podaj wartości z zakresu od 0 do {len(przeglad)}. ")
 
     #zakończenie programu(działa)
     elif wybor_uzytkownika == "8":
         break
+
+    else:
+        print("Wybrano niewłaściwą opcję.\n")

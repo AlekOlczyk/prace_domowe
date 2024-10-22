@@ -56,7 +56,7 @@ while True:
             print(f"Dodałeś do konta {kwota}.\n")
             przeglad.append(f"Dodanie {kwota} zł.")
 
-    # sprzedaż produktów z magazynu(nie działa)
+    # sprzedaż produktów z magazynu(działa)
     elif wybor_uzytkownika == "2" or wybor_uzytkownika == "sprzedaz":
         nazwa_produktu = input("Podaj nazwe produktu ktory chcesz kupić: ")
         ilosc_produktu = int(input("Podaj ile sztuk produktu chcesz kupić: "))
@@ -68,18 +68,18 @@ while True:
                 print(f"Zakupiłeś {nazwa_produktu} w ilosci sztuk: {ilosc_produktu}.")
                 przeglad.append(f"Sprzedaż {nazwa_produktu} w ilości {ilosc_produktu} za kwotę {cena_przedmiotu * ilosc_produktu} zł.")
                 break
-
-            else:
-                print("Nie możesz zakupić podanego produktu w podanej ilosci.")
-                przeglad.append("Nieudana proba zakupu.")
-                break
-
-            # elif produkt.get("nazwa") == nazwa_produktu and produkt.get("stan_magazynu") < ilosc_produktu and produkt.get("cena") == cena_przedmiotu:
-            #     print("Nie mamy wystarczającej ilości produktu w magazynie")
-            # elif produkt.get("nazwa") == nazwa_produktu and produkt.get("stan_magazynu") < ilosc_produktu and produkt.get("cena") != cena_przedmiotu:
-            #     print("Podano błędną cenę.")
-            # elif produkt.get("nazwa") != nazwa_produktu:
-            #     print("Podano błędną nazwę produktu.")
+            if produkt.get("nazwa") != nazwa_produktu and produkt.get("stan_magazynu") >= ilosc_produktu and produkt.get("cena") == cena_przedmiotu:
+                print("Podano błędną nazwe produktu, spróbuj ponownie.")
+                przeglad.append("Nieudana próba zakupu: błędna nazwa.")
+            if produkt.get("nazwa") == nazwa_produktu and produkt.get("stan_magazynu") < ilosc_produktu and produkt.get("cena") == cena_przedmiotu:
+                print("Nie mamy wystarczającej ilości produtku w magazynie.")
+                przeglad.append("Nieudana próba zakupu: żądana ilość jest zbyt duża.")
+            if produkt.get("nazwa") == nazwa_produktu and produkt.get("stan_magazynu") >= ilosc_produktu and produkt.get("cena") != cena_przedmiotu:
+                print("Podano błędną cene.")
+                przeglad.append("Nieudana próba zakupu: podano błędna cene.")
+            if produkt.get("nazwa") == nazwa_produktu and produkt.get("stan_magazynu") < ilosc_produktu and produkt.get("cena") != cena_przedmiotu:
+                print("Nie mamy wystarczającej ilości produtku w magazynie. Podano blędną cene.")
+                przeglad.append("Nieudana próba zakupu: żądana ilość jest zbyt duża oraz podano błędna cene.")
 
 
     # Zakup nowych produktow(działa)

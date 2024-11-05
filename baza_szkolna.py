@@ -1,3 +1,4 @@
+
 # Utwórz program do zarządzania bazą szkolną. Istnieje możliwość tworzenia trzech typów użytkowników (uczeń, nauczyciel, wychowawca) a także zarządzania nimi.
 #
 # Po uruchomieniu programu można wpisać jedną z następujących komend: utwórz, zarządzaj, koniec.
@@ -24,127 +25,122 @@
 # Polecenie "wychowawca" - Należy pobrać imię i nazwisko nauczyciela, a program ma wypisać wszystkich uczniów, których prowadzi wychowawca.
 # Polecenie "koniec" - Wraca do pierwszego menu.
 
-uczniowie = [{
-    "imie": "Adam",
-    "nazwisko": "Malysz",
-    "klasa": "1b",
-    "lekcje": ["polski", "geografia"]
-    },
-    {
-    "imie": "Tomasz",
-    "nazwisko": "Adamczyk",
-    "klasa": "3a",
-    "lekcje": ["geografia", "polski"]
-    }
-]
-nauczyciele = [{
-    "imie": "Monika",
-    "nazwisko": "Polska",
-    "nazwa_przedmiotu": "polski",
-    "prowadzone_klasy": "1a, 1b, 1c"
-    },
-    {
-    "imie": "Iwona",
-    "nazwisko": "Kowalik",
-    "nazwa_przedmiotu": "geografia",
-    "prowadzona_klasy": "2a, 1b, 3a"
-    }
-]
-wychowawca = [{
-    "imie": "Ewa",
-    "nazwisko": "Swoboda",
-    "wychowawstwo": "1b"
-    },
-    {
-    "imie": "Marek",
-    "nazwisko": "Polski",
-    "wychowawstwo": "3a"
-    }
-]
 
-def tworzenie_ucznia():
-    imie_ucznia = input("Podaj imie ucznia, którego chcesz dodać: ")
-    nazwisko_ucznia = input("Podaj nazwisko ucznia, którego chcesz dodać: ")
-    klasa_ucznia = input("Podaj klasę, w której jest uczeń: ")
+class Uczniowie:
+    def __init__(self, imie_ucznia, nazwisko_ucznia, klasa_ucznia, lekcje_ucznia):
+        self.imie_ucznia = imie_ucznia
+        self.nazwisko_ucznia = nazwisko_ucznia
+        self.klasa_ucznia = klasa_ucznia
+        self.lekcje_ucznia = lekcje_ucznia
 
-    nowy_uczen = [{
-        "imie": imie_ucznia,
-        "nazwisko": nazwisko_ucznia,
-        "klasa": klasa_ucznia
-    }]
-    uczniowie.append(nowy_uczen)
+    def __repr__(self):
+        return f"Uczeń {self.imie_ucznia} {self.nazwisko_ucznia} z klasy {self.klasa_ucznia}."
 
-def tworzenie_nauczyciela():
-    imie_nauczyciela = input("Podaj imie nauczyciela, którego chcesz dodać: ")
-    nazwisko_nauczyciela = input("Podaj nazwisko nauczyciela, którego chcesz dodać: ")
-    nazwa_przedmiotu = input("Podaj nazwę przedmiotu, którego dany nauczyciel uczy: ")
-    nauczane_klasy = input("Podaj w jakich klasach uczy nauczyciel") # nie jest to jedno po drugim tak jak w zadaniu
+class Nauczyciele:
+    def __init__(self, imie_nauczyciela, nazwisko_nauczyciela, nazwa_przedmiotu, uczone_klasy, wychowawstwo):
+        self.imie_nauczyciela = imie_nauczyciela
+        self.nazwisko_nauczyciela = nazwisko_nauczyciela
+        self.nazwa_przedmiotu = nazwa_przedmiotu
+        self.uczone_klasy = uczone_klasy
+        self.wychowawstwo = wychowawstwo
 
-    nowy_nauczyciel = [{
-        "imie": imie_nauczyciela,
-        "nazwisko": nazwisko_nauczyciela,
-        "nazwa_przedmiotu": nazwa_przedmiotu,
-        "prowadzone_klasy": nauczane_klasy
-    }]
-    nauczyciele.append(nowy_nauczyciel)
+    def __repr__(self):
+        return f"Nauczyciel {self.imie_nauczyciela} {self.nazwisko_nauczyciela} prowadzony przedmiot {self.nazwa_przedmiotu} w klasach {self.uczone_klasy}, wychowawca klasy {self.wychowawstwo}."
 
-def tworzenie_wychowawcy():
-    imie_wychowawcy = input("Podaj imie wychowawcy, którego chcesz wprowadzić: ")
-    nazwisko_wychowawcy = input("Podaj nazwisko wychowawcy, którego chcesz wprowadzić: ")
-    wychowawstwo = input("Podaj jakiej klasy jest wychowawcą: ")
+szkola = {
+    "uczniowie": [Uczniowie("Aleksander", "Olczyk", "1b", "polski, geografia"),
+                  Uczniowie("Adam", "Malysz", "1a", "geografia, angielski")],
+    "nauczyciele": [Nauczyciele("Anna", "Nowak", "polski", "1a", "1a"),
+                    Nauczyciele("Ewa", "Swoboda", "geografia", "1b", "1b"),
+                    Nauczyciele("Magdalena", "Kowalik", "angielski", "1a, 1b", None)]
+          }
 
-    nowy_wychowawca = [{
-        "imie": imie_wychowawcy,
-        "nazwisko": nazwisko_wychowawcy,
-        "wychowawstwo": wychowawstwo
-    }]
-    wychowawca.append(nowy_wychowawca)
+def dodanie_ucznia(imie_ucznia, nazwisko_ucznia, klasa_ucznia): # nie działa
+    uczniowie.append(imie_ucznia, nazwisko_ucznia, klasa_ucznia)
 
-def wyswietlanie_klasy():   #nie działa, nie wiem jak się do tego zabrać
-    wybor_klasy = input("Podaj klase: ")
 
-def wyswietlenie_ucznia():
-    imie_ucznia = input("Podaj imie ucznia: ")
-    nazwisko_ucznia = input("Podaj nazwisko ucznia: ")
-    print(f"Uczeń o imieniu {imie_ucznia} i nazwisku {nazwisko_ucznia} ma  ")
+
+
+def wyswielenie_uczniow_i_wychowawcy_w_danej_klasie(klasa_ucznia): #działa
+    lista_uczniow = []
+    for uczen in szkola.get("uczniowie"):
+        if uczen.klasa_ucznia == klasa_ucznia:
+            lista_uczniow.append(uczen)
+    wychowawca = []
+    for nauczyciel in szkola.get("nauczyciele"):
+        if nauczyciel.wychowawstwo == klasa_ucznia:
+            wychowawca.append(nauczyciel)
+    return lista_uczniow, wychowawca
+
+def wyswieltenie_zajec_ucznia_oraz_nauczyciela_prowadzacego(imie_ucznia, nazwisko_ucznia): # nie przypisuje nauczyciela do lekcji
+    for uczen in szkola.get("uczniowie"):
+        if uczen.imie_ucznia == imie_ucznia and uczen.nazwisko_ucznia == nazwisko_ucznia:
+            return uczen.lekcje_ucznia
+    for nauczyciel in szkola.get("nauczyciele"):
+        if nauczyciel.lekcje_ucznia == nauczyciel.nazwa_przedmiotu:
+            return nauczyciel.nazwa_przedmiotu
+
+def wyswietlanie_klas_nauczyciela(imie_nauczyciela, nazwisko_nauczyciela): #działa
+    klasy_nauczyciela = []
+    for nauczyciel in szkola.get("nauczyciele"):
+        if nauczyciel.imie_nauczyciela == imie_nauczyciela and nauczyciel.nazwisko_nauczyciela == nazwisko_nauczyciela:
+            klasy_nauczyciela.append(nauczyciel.uczone_klasy)
+    return klasy_nauczyciela
+
+# def wyswietlanie_uczniow_wychowawcy(imie_wychowawcy, nazwisko_wychowawcy): #nie działa
+#     lista_uczniow_wychowawcy = []
+#     for wychowawca in szkola.get("nauczyciele"):
+#         if wychowawca.imie_nauczyciela == imie_wychowawcy and wychowawca.nazwisko_nauczyciela == nazwisko_wychowawcy:
+
 
 
 
 while True:
-    wybor_uzytkownika = input("Wybierz jedna z dostepnych opcji:\n1. utwórz\n2. zarzadzaj\n3. koniec\n")
+    wybor_uzytkownika = input("Wybierz co chcesz zrobic:\n1. utworz\n2. zarzadzaj\n3. koniec\n")
+    if wybor_uzytkownika == "1" or wybor_uzytkownika == "utworz":
+        imie_ucznia = input("Podaj imie ucznia, którego chcesz dodać: ")
+        nazwisko_ucznia = input("Podaj nazwisko ucznia, którego chcesz dodać: ")
+        klasa_ucznia = input("Podaj klase ucznia, którego chcesz dodać: ")
 
-    #opcja UTWÓRZ(działa, ale klasy nauczyciela do poprawy)
-    if wybor_uzytkownika == "1" or wybor_uzytkownika == "utwórz":
-        wybor_polecenia = input("Wybierz kogo chcesz utworzyć:\n1. uczeń\n2. nauczyciel\n3. wychowawca\n4. koniec")
-        #tworzenie ucznia
-        if wybor_polecenia == "1" or wybor_polecenia == "uczeń":
-            tworzenie_ucznia()
+        uczniowie.append(imie_ucznia, nazwisko_ucznia, klasa_ucznia)
 
-        #tworzenie nauczyciela
-        elif wybor_polecenia == "2" or wybor_polecenia == "nauczyciel":
-            tworzenie_nauczyciela()
 
-        #tworzenie_wychowawcy
-        elif wybor_polecenia == "3" or wybor_polecenia == "wychowawca":
-            tworzenie_wychowawcy()
-
-        #powrót do pierwszego menu, koniec tworzenia
-        elif wybor_polecenia == "4" or wybor_polecenia == "koniec":
-            pass
 
     elif wybor_uzytkownika == "2" or wybor_uzytkownika == "zarzadzaj":
-        wybor_zarzadzania = input("Wybierz jedna z dostępnych opcji:\n1. klasa\n2. uczen\n3. nauczyciel\n4. wychowawca\n5. koniec")
-        #nie działa
+        wybor_zarzadzania = input("Wybierz co chcesz zrobic:\n1. klasa\n2. uczen\n3. nauczyciel\n4. wychowawca\n5. koniec\n")
         if wybor_zarzadzania == "1" or wybor_zarzadzania == "klasa":
-            pass
-        elif
+            wybor_klasy = input("Podaj klase: ")
+            uczniowie = wyswielenie_uczniow_i_wychowawcy_w_danej_klasie(wybor_klasy)
+            print(uczniowie)
+
+        elif wybor_zarzadzania == "2" or wybor_zarzadzania == "uczen":
+            wybor_ucznia_imie = input("Podaj imie ucznia: ")
+            wybor_ucznia_nazwisko = input("Podaj nazwisko ucznia: ")
+            przedmiot = wyswieltenie_zajec_ucznia_oraz_nauczyciela_prowadzacego(wybor_ucznia_imie, wybor_ucznia_nazwisko)
+            print(przedmiot)
 
 
-        #powrót do menu głównego
-        elif wybor_uzytkownika == "5" or wybor_zarzadzania == "koniec":
-            pass
+        elif wybor_zarzadzania == "3" or wybor_zarzadzania == "nauczyciel":
+            wybor_imienia_nauczyciela = input("Podaj imie nauczyciela: ")
+            wybor_nazwiska_nauczyciela = input("Podaj nazwisko nauczyciela: ")
+            lista_klas = wyswietlanie_klas_nauczyciela(wybor_imienia_nauczyciela, wybor_nazwiska_nauczyciela)
+            print(lista_klas)
 
-    #zakończeni programu (działa)
-    elif wybor_uzytkownika == "3" or wybor_uzytkownika == "koniec":
+
+        elif wybor_zarzadzania == "4" or wybor_zarzadzania == "wychowawca":
+            wybor_imienia_wychowawcy = input("Podaj imie wychowawcy: ")
+            wybor_nazwiska_wychowawcy = input("Podaj nazwisko wychowawcy: ")
+            # lista_uczniow = wyswietlanie_uczniow_wychowawcy(wybor_imienia_wychowawcy, wybor_nazwiska_wychowawcy)
+            # print(lista_uczniow)
+
+        elif wybor_zarzadzania == "5" or wybor_zarzadzania == "koniec":
+            break
+
+        else:
+            print("Błędna komenda!")
+
+    elif wybor_uzytkownika == "3" or wybor_uzytkownika == "zakoncz":
         break
+    else:
+        print("Błędna komenda!")
 

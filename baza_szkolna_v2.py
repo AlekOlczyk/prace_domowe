@@ -36,6 +36,9 @@ class Uczniowie: #powinna być lp pojedyczna
     def __repr__(self):
         return f"Uczeń {self.imie_ucznia} {self.nazwisko_ucznia} z klasy {self.klasa_ucznia}."
 
+    def pokaz_imie_i_nazwisko_ucznia(self):
+        return f"{self.imie_ucznia} {self.nazwisko_ucznia}"
+
     def pokaz_lekcje(self, nauczyciele):
         for przedmiot in self.lekcje_ucznia:
             print(przedmiot)
@@ -45,15 +48,12 @@ class Uczniowie: #powinna być lp pojedyczna
                         if klasa == self.klasa_ucznia:
                             print(nauczyciel.pokaz_imie_i_nazwisko())
 
-    def wyswieltenie_uczniow_i_wychowawcy_danej_klasy_po_klasie(self, nauczyciele): # nie wiem co to
-        for uczen in self.klasa_ucznia:
-            print(uczen)
-            # for wychowawca in nauczyciele:
-
-
-
-
-
+    # def pokaz_uczniow(self, nauczyciele):##############
+    #     for uczen in self.imie_ucznia and self.nazwisko_ucznia:
+    #         print(uczen)
+    #         for wychowawca in nauczyciele:
+    #             if wychowawca.wychowawstwo == klasa_ucznia:
+    #                 print(wychowawca.pokaz_imie_i_nazwisko)
 
 
 class Nauczyciele: #powinna byc lp pojedyncza
@@ -75,10 +75,7 @@ class Nauczyciele: #powinna byc lp pojedyncza
             print(f"Wychowawca klasy: {wychowawca}")
             for uczen in uczniowie:
                 if uczen.klasa_ucznia == wychowawca:
-                    print(uczen)
-
-
-
+                    print(uczen.pokaz_imie_i_nazwisko_ucznia())
 
 
 
@@ -92,8 +89,6 @@ szkola = {
 
 
 
-
-
 # def wyswielenie_uczniow_i_wychowawcy_w_danej_klasie(klasa_ucznia): #działa
 #     lista_uczniow = []
 #     for uczen in szkola.get("uczniowie"):
@@ -104,6 +99,23 @@ szkola = {
 #         if nauczyciel.wychowawstwo == klasa_ucznia:
 #             wychowawca.append(nauczyciel)
 #     return lista_uczniow, wychowawca
+
+
+# def wyswieltenie_uczniow_i_wychowawcy_danej_klasy_po_klasie_(klasa_ucznia):###########
+#     for uczen in szkola.get("uczniowie"):
+#         if uczen.klasa_ucznia == klasa_ucznia:
+#             uczen.pokaz_uczniow(szkola["uczniowie"])
+
+def wyswieltenie_uczniow_i_wychowawcy_danej_klasy_po_klasie_(klasa_ucznia):
+    uczniowie_klasy = []
+    for uczen in szkola.get("uczniowie"):
+        if uczen == klasa_ucznia:
+            uczniowie_klasy.append(uczen)
+    wychowawca_klasy = []
+    for wychowawca in szkola.get("nauczyciele"):
+        if wychowawca == klasa_ucznia:
+            wychowawca_klasy.append(wychowawca)
+    return uczniowie_klasy, wychowawca_klasy
 
 
 def wyswieltenie_zajec_ucznia_oraz_nauczyciela_prowadzacego(imie_ucznia, nazwisko_ucznia):
@@ -132,24 +144,43 @@ while True:
     wybor_uzytkownika = input("Wybierz co chcesz zrobic:\n1. utworz\n2. zarzadzaj\n3. koniec\n")
 
     if wybor_uzytkownika == "1" or wybor_uzytkownika == "utworz":
-        wybor_dodawania = input("Wybierz co chcesz zrobic:\n1. uczen\n2. nauczyciel\n3. wychowawca\n4. koniec")
+        wybor_dodawania = input("Wybierz co chcesz zrobic:\n1. uczen\n2. nauczyciel\n3. wychowawca\n4. koniec\n")
 
         if wybor_dodawania == "1" or wybor_dodawania == "uczen":
             imie_ucznia = input("Podaj imie ucznia, którego chcesz dodać: ")
             nazwisko_ucznia = input("Podaj nazwisko ucznia, którego chcesz dodać: ")
             klasa_ucznia = input("Podaj klase ucznia, którego chcesz dodać: ")
 
-            # uczniowie.append(imie_ucznia, nazwisko_ucznia, klasa_ucznia)
             nowy_uczen = Uczniowie(imie_ucznia, nazwisko_ucznia, klasa_ucznia, ["angielski"])
             szkola["uczniowie"].append(nowy_uczen)
 
         elif wybor_dodawania == "2" or wybor_dodawania == "nauczyciel":
             imie_nauczyciela = input("Podaj imie nauczyciela, którego chcesz dodać: ")
             nazwisko_nauczyciela = input("Podaj nazwisko nauczyciela, którego chcesz dodać: ")
-            klasa_ucznia = input("Podaj klase ucznia, którego chcesz dodać: ")
+            nazwa_przedmiotu = input("Podaj klase ucznia, którego chcesz dodać: ")
+            klasy = []
+            while True:
+                uczone_klasy = input("Podaj klasy, które uczy nauczyciel: ")
+                if uczone_klasy == "":
+                    break
+                klasy.append(uczone_klasy)
+            nowy_nauczyciel = Nauczyciele(imie_nauczyciela, nazwisko_nauczyciela, nazwa_przedmiotu, klasy, [None])
+            szkola["nauczyciele"].append(nowy_nauczyciel)
 
 
+        elif wybor_dodawania == "3" or wybor_dodawania == "wychowawca":
+            imie_wychowawcy = input("Podaj imie wychowawcy: ")
+            nazwisko_wychowawcy = input("Podaj nazwisko wychowawcy: ")
+            prowadzona_klasa = input("Podaj nazwe prowadzonej klasy tego nauczyciela: ")
 
+            nowy_wychowawca = Nauczyciele(imie_wychowawcy, nazwisko_wychowawcy,[None], prowadzona_klasa , [None])
+            szkola["nauczyciele"].append(nowy_wychowawca)
+
+        elif wybor_dodawania == "4" or wybor_dodawania == "koniec":
+            continue
+
+        else:
+            print("Błędna komenda")
 
 
     elif wybor_uzytkownika == "2" or wybor_uzytkownika == "zarzadzaj":
@@ -157,15 +188,13 @@ while True:
 
         if wybor_zarzadzania == "1" or wybor_zarzadzania == "klasa":
             wybor_klasy = input("Podaj klase: ")
-            uczniowie = wyswielenie_uczniow_i_wychowawcy_w_danej_klasie(wybor_klasy)
-            print(uczniowie)
+            wynik = wyswieltenie_uczniow_i_wychowawcy_danej_klasy_po_klasie_(wybor_klasy)
+            print(wynik)
 
         elif wybor_zarzadzania == "2" or wybor_zarzadzania == "uczen":
             wybor_ucznia_imie = input("Podaj imie ucznia: ")
             wybor_ucznia_nazwisko = input("Podaj nazwisko ucznia: ")
             wyswieltenie_zajec_ucznia_oraz_nauczyciela_prowadzacego(wybor_ucznia_imie, wybor_ucznia_nazwisko)
-
-
 
         elif wybor_zarzadzania == "3" or wybor_zarzadzania == "nauczyciel":
             wybor_imienia_nauczyciela = input("Podaj imie nauczyciela: ")
@@ -180,7 +209,7 @@ while True:
             wyswietlanie_uczniow_wychowawcy(wybor_imienia_wychowawcy, wybor_nazwiska_wychowawcy)
 
         elif wybor_zarzadzania == "5" or wybor_zarzadzania == "koniec":
-            break
+            continue
 
         else:
             print("Błędna komenda!")

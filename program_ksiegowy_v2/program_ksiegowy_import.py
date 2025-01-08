@@ -51,7 +51,7 @@ def zakup(manager):
     if cena_jednostkowa * ilosc_zakupionego_produktu > manager.saldo:
         print("Cena zakupu przewyższa obecny stan konta.")
         manager.historia.append("Próba zakupu zza drogich produktów.")
-        continue
+        
 
 
     manager.stan_magazynowy.append({
